@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { DataForm } from "./DataForm";
 import { useRedCon } from "../Context/State";
+import CurrencyFormat from "react-currency-format";
 
 export const AllProducts = () => {
   const [productName, setProductName] = useState("");
@@ -117,6 +118,10 @@ export const AllProducts = () => {
       </td>
     </tr>
   ));
+  const allPrice = useMemo(
+    () => products.reduce((acc,curr) => acc + curr.price * curr.count, 0),
+    [products]
+  );
   return (
     <div>
       <form className="w-75 m-auto text-center" style={{ display: display }}>
@@ -219,6 +224,17 @@ export const AllProducts = () => {
         productsList={productsList}
         theadItems={th}
       />
+      <CurrencyFormat
+        value={allPrice}
+        displayType={"text"}
+        thousandSeparator={true}
+        prefix={"EGP "}
+        renderText={(value) => (
+          <h4 className="text-center">
+            {lang === "en" ? "Total Price is " : "إجمالى السعر "}
+            {value}
+          </h4>
+        )}/>
     </div>
   );
 };

@@ -50,7 +50,7 @@ export const MainReducer = (state = initialState, action) => {
       // eslint-disable-next-line array-callback-return
       newPurchases.map((purchaseItems) => {
         const index = product.findIndex(
-          (item) => item.name.trim() === purchaseItems.name.trim()
+          (item) => item.name.trim().toLowerCase() === purchaseItems.name.trim().toLowerCase()
         );
         if (index !== -1) {
           product[index].count += purchaseItems.count;

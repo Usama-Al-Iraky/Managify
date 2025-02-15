@@ -16,7 +16,7 @@ export const LogIn = () => {
         setIsSucceed(true);
         setAlert(true);
       })
-      .catch((err) => {
+      .catch(() => {
         setIsSucceed(false);
         setAlert(true);
       });

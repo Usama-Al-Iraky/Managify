@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { DataForm } from "../../Components/DataForm";
 import { useRedCon } from "../../Context/State";
+import CurrencyFormat from "react-currency-format";
 
 export const Invoices = () => {
   const {
@@ -64,6 +65,10 @@ export const Invoices = () => {
       <td>{i.date}</td>
     </tr>
   ));
+  const invoicesTotalPrice = useMemo(
+    () => invoiceToShow.reduce((acc, i) => acc + i.invoicePrice, 0),
+    [invoiceToShow]
+  );
 
   return (
     <div>
@@ -90,6 +95,19 @@ export const Invoices = () => {
         style={{ cursor: "pointer" }}
         theadItems={th}
       />
+
+      <CurrencyFormat
+        renderText={(value) => (
+          <h4 className="text-center">
+            {lang === "en" ? "Invoices Total Price" : "إجمالى سعر الفواتير"}:{" "}
+            {value} {lang === "en" ? "EGP" : "جنيها"}
+          </h4>
+        )}
+        decimalScale={2}
+        value={invoicesTotalPrice}
+        displayType="text"
+        thousandSeparator={true}
+      />
       <DataForm productsList={productsList} theadItems={th1} />
       <table className="test">
         <thead>
@@ -103,9 +121,27 @@ export const Invoices = () => {
           <tr>
             <td> {invoiceItems.name} </td>
             <td> {invoiceItems.date} </td>
-            <td> {invoiceItems.priceBefor} </td>
-            <td> {invoiceItems.invoiceDiscount} </td>
-            <td> {invoiceItems.invoicePrice} </td>
+            <CurrencyFormat
+              renderText={(value) => <td>{value}</td>}
+              decimalScale={2}
+              value={invoiceItems.priceBefor}
+              displayType="text"
+              thousandSeparator={true}
+            />
+            <CurrencyFormat
+              renderText={(value) => <td>{value}</td>}
+              decimalScale={2}
+              value={invoiceItems.invoiceDiscount}
+              displayType="text"
+              thousandSeparator={true}
+            />
+            <CurrencyFormat
+              renderText={(value) => <td>{value}</td>}
+              decimalScale={2}
+              value={invoiceItems.invoicePrice}
+              displayType="text"
+              thousandSeparator={true}
+            />
           </tr>
         </tbody>
       </table>

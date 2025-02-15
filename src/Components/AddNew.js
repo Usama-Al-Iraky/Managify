@@ -3,6 +3,7 @@ import { DataForm } from "./DataForm";
 import { useRedCon } from "../Context/State";
 import shortid from "shortid";
 import moment from "moment";
+import CurrencyFormat from "react-currency-format";
 
 export const AddNew = () => {
   const [productName, setProductName] = useState("");
@@ -25,7 +26,7 @@ export const AddNew = () => {
       setAds(product.ads);
       setTaxes(product.taxes);
       setDiscount(product.discount);
-    }else{
+    } else {
       setCompany("");
       setCategory("");
       setMainPrice("");
@@ -34,6 +35,9 @@ export const AddNew = () => {
       setDiscount("");
     }
   };
+  useEffect(() => {
+    handelAutoFill();
+  }, [productName]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getPrice = () => {
     const total = +mainPrice + (+mainPrice * +taxes) / 100 + +ads - +discount;
@@ -147,7 +151,6 @@ export const AddNew = () => {
             type="text"
             onChange={(e) => {
               setProductName(e.target.value);
-              handelAutoFill()
             }}
             placeholder={lang === "en" ? "Product Name" : "إسم المنتج"}
           />
@@ -217,7 +220,19 @@ export const AddNew = () => {
             placeholder={lang === "en" ? "Discount" : "الخصم"}
           />
           <div>
-            {lang === "en" ? `Price is ${price} EGP` : `السعر ${price} جنيها`}
+            <CurrencyFormat
+              renderText={(value) => (
+                <>
+                  {lang === "en"
+                    ? `Price is ${value} EGP`
+                    : `السعر ${value} جنيها`}
+                </>
+              )}
+              decimalScale={2}
+              value={price}
+              displayType="text"
+              thousandSeparator={true}
+            />
           </div>
         </div>
         <button type="submit" onClick={handleAddNew} className="w-100">
@@ -246,8 +261,18 @@ export const AddNew = () => {
             placeholder={lang === "en" ? "Discount" : "الخصم"}
           />
           <div className="d-flex flex-md-column align-items-center justify-content-between">
-            <span> {lang === "en" ? "Total Price" : "السعر الكلى"} </span>
-            <span> {purchaseTotalPrice} </span>
+            <CurrencyFormat
+              renderText={(value) => (
+                <>
+                  <span> {lang === "en" ? "Total Price" : "السعر الكلى"} </span>
+                  <span>{value}</span>
+                </>
+              )}
+              decimalScale={2}
+              value={purchaseTotalPrice}
+              displayType="text"
+              thousandSeparator={true}
+            />
           </div>
           <button onClick={handelSubminPurchase}>
             {lang === "en" ? "Done" : "تم"}

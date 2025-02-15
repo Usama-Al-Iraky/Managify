@@ -3,6 +3,7 @@ import { DataForm } from "../../Components/DataForm";
 import { useRedCon } from "../../Context/State";
 import shortid from "shortid";
 import moment from "moment";
+import CurrencyFormat from "react-currency-format";
 
 export const Invoice = () => {
   const { lang, products, dispatch, invoice } = useRedCon();
@@ -167,8 +168,18 @@ export const Invoice = () => {
             placeholder={lang === "en" ? "Discount" : "الخصم"}
           />
           <div className="d-flex flex-md-column align-items-center justify-content-between">
-            <span> {lang === "en" ? "Total Price" : "السعر الكلى"} </span>
-            <span> {invoicePrice} </span>
+            <CurrencyFormat
+              renderText={(value) => (
+                <>
+                  <span> {lang === "en" ? "Total Price" : "السعر الكلى"} </span>
+                  <span>{value}</span>
+                </>
+              )}
+              decimalScale={2}
+              value={invoicePrice}
+              displayType="text"
+              thousandSeparator={true}
+            />
           </div>
           <button onClick={handelSubmitInvoice}>
             {lang === "en" ? "Done" : "تم"}
